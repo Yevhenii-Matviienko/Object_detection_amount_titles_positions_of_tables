@@ -1,0 +1,12 @@
+matplotlib
+numpy
+opencv-python
+pymupdf
+pytesseract
+paddlepaddle
+paddleocr
+pillow
+python-doctr
+git+https://github.com/huggingface/transformers.git
+torch==2.4.1
+torchvision==0.19.1

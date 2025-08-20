@@ -1,0 +1,19 @@
+services:
+  table_detector_in_1_page_pdf_file:
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: table_detector_in_1_page_pdf_file:py3.11.9
+    container_name: table_detector_in_1_page_pdf_file
+    environment:
+      - DISPLAY=${DISPLAY:-host.docker.internal:0.0}
+      - MPLBACKEND=TkAgg
+      - TZ=${TZ:-UTC}
+    volumes:
+      - .:/desktop_application
+      - type: bind
+        source: "C:/Users/Zhenia Matvienko/Desktop/Object detection (amount, titles, positions of tables)/Files_with_tables"
+        target: /data/files
+        read_only: true
+    stdin_open: true
+    tty: true

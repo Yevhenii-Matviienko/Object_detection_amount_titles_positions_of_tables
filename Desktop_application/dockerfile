@@ -1,0 +1,31 @@
+FROM python:3.11.9-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    python3-tk tk tcl \
+    libx11-6 libxext6 libxrender1 libxft2 libxt6 libxss1 \
+    libgl1 libglib2.0-0 \
+    tesseract-ocr libtesseract-dev tesseract-ocr-eng \
+    git curl ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV TESSERACT_CMD=/usr/bin/tesseract
+
+WORKDIR /desktop_application
+
+COPY requirements.txt /desktop_application/requirements.txt
+
+RUN pip install --upgrade pip && \
+    pip install --index-url https://download.pytorch.org/whl/cpu \
+        torch==2.4.1 torchvision==0.19.1 && \
+    pip install -r /desktop_application/requirements.txt
+
+COPY . /desktop_application
+
+RUN useradd -m desktop_application_user && chown -R desktop_application_user:desktop_application_user /desktop_application
+USER desktop_application_user
+
+CMD ["python", "desktop_application.py"]
